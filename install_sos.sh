@@ -6,6 +6,7 @@ APPIMAGE_SRC="${1:-${SCRIPT_DIR}/SOS-Game-x86_64-glibc2.27.AppImage}"
 
 INSTALL_DIR="/opt/sos"
 DESKTOP_DIR="/usr/share/applications"
+DESKTOP_FILE="${DESKTOP_DIR}/sos.desktop"
 ICON_DEST="${INSTALL_DIR}/sos.svg"
 
 if [[ ! -f "$APPIMAGE_SRC" ]]; then
@@ -19,7 +20,15 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
-mkdir -p "$INSTALL_DIR"
+# Clean up any previous install so this acts as an update too.
+if [[ -d "$INSTALL_DIR" || -f "$DESKTOP_FILE" ]]; then
+  rm -f "$DESKTOP_FILE"
+  rm -f "$INSTALL_DIR/sos-x86_64.AppImage" "$INSTALL_DIR/sos.svg"
+  mkdir -p "$INSTALL_DIR"
+else
+  mkdir -p "$INSTALL_DIR"
+fi
+
 cp "$APPIMAGE_SRC" "$INSTALL_DIR/sos-x86_64.AppImage"
 chmod +x "$INSTALL_DIR/sos-x86_64.AppImage"
 
@@ -30,7 +39,7 @@ if [[ -f "$ICON_SRC_SVG" ]]; then
   ICON_LINE="Icon=${ICON_DEST}"
 fi
 
-cat > "$DESKTOP_DIR/sos.desktop" <<EOF2
+cat > "$DESKTOP_FILE" <<EOF2
 [Desktop Entry]
 Name=SOS Game
 Comment=Multiplayer SOS game
@@ -47,4 +56,4 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "Installed to ${INSTALL_DIR}"
-echo "Desktop launcher: ${DESKTOP_DIR}/sos.desktop"
+echo "Desktop launcher: ${DESKTOP_FILE}"
