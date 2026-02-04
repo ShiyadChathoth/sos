@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <errno.h>
+#include <ifaddrs.h>
+#include <net/if.h>
 
 // --- 1. Struct Definitions (Must be first) ---
 typedef struct {
@@ -391,17 +393,35 @@ int try_bind_discovery() {
     return 1;
 }
 
-int find_host_ip(char *outIp, size_t outLen) {
-    int s = socket(AF_INET, SOCK_DGRAM, 0);
-    if (s < 0) return 0;
-    int opt = 1;
-    setsockopt(s, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
-
+static void send_discovery_broadcasts(int s) {
+    // Always try the limited broadcast first.
     struct sockaddr_in bcast;
     memset(&bcast, 0, sizeof(bcast));
     bcast.sin_family = AF_INET;
     bcast.sin_port = htons(DISCOVERY_PORT);
     bcast.sin_addr.s_addr = inet_addr("255.255.255.255");
+    sendto(s, DISCOVERY_MSG, strlen(DISCOVERY_MSG), 0, (struct sockaddr*)&bcast, sizeof(bcast));
+
+    // Also send to per-interface broadcast addresses (Wi-Fi routers often block 255.255.255.255).
+    struct ifaddrs *ifaddr = NULL;
+    if (getifaddrs(&ifaddr) != 0 || !ifaddr) return;
+    for (struct ifaddrs *ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+        if (!ifa->ifa_addr) continue;
+        if (ifa->ifa_addr->sa_family != AF_INET) continue;
+        if (!(ifa->ifa_flags & IFF_UP)) continue;
+        if (ifa->ifa_flags & IFF_LOOPBACK) continue;
+        struct sockaddr_in *baddr = (struct sockaddr_in *)ifa->ifa_broadaddr;
+        if (!baddr) continue;
+        sendto(s, DISCOVERY_MSG, strlen(DISCOVERY_MSG), 0, (struct sockaddr*)baddr, sizeof(*baddr));
+    }
+    freeifaddrs(ifaddr);
+}
+
+int find_host_ip(char *outIp, size_t outLen) {
+    int s = socket(AF_INET, SOCK_DGRAM, 0);
+    if (s < 0) return 0;
+    int opt = 1;
+    setsockopt(s, SOL_SOCKET, SO_BROADCAST, &opt, sizeof(opt));
 
     struct timeval tv;
     tv.tv_sec = 1;
@@ -409,7 +429,7 @@ int find_host_ip(char *outIp, size_t outLen) {
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 
     for (int i = 0; i < 5; i++) {
-        sendto(s, DISCOVERY_MSG, strlen(DISCOVERY_MSG), 0, (struct sockaddr*)&bcast, sizeof(bcast));
+        send_discovery_broadcasts(s);
 
         char buf[64];
         struct sockaddr_in from;
