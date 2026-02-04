@@ -12,6 +12,7 @@ BIN_NAME="sos"
 mkdir -p "${BUILD_DIR}"
 rm -rf "${APPDIR}"
 mkdir -p "${APPDIR}/usr/bin"
+mkdir -p "${APPDIR}/usr/lib"
 mkdir -p "${APPDIR}/usr/share/applications"
 mkdir -p "${APPDIR}/usr/share/icons/hicolor/256x256/apps"
 
@@ -50,9 +51,20 @@ fi
 cat > "${APPDIR}/AppRun" <<'EOF'
 #!/usr/bin/env bash
 HERE="$(cd "$(dirname "$0")" && pwd)"
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH:-}"
 exec "${HERE}/usr/bin/sos" "$@"
 EOF
 chmod +x "${APPDIR}/AppRun"
+
+# Bundle SDL2 runtime libs if available (needed on older distros like Ubuntu 18.04).
+SDL_LIB_DIR="/usr/lib/x86_64-linux-gnu"
+if [[ -d "${SDL_LIB_DIR}" ]]; then
+  for lib in libSDL2-2.0.so.0 libSDL2_ttf-2.0.so.0; do
+    if [[ -f "${SDL_LIB_DIR}/${lib}" ]]; then
+      cp "${SDL_LIB_DIR}/${lib}" "${APPDIR}/usr/lib/${lib}"
+    fi
+  done
+fi
 
 if ! command -v appimagetool >/dev/null 2>&1; then
   echo "appimagetool not found in PATH." >&2
