@@ -63,3 +63,10 @@ strings squashfs-root/usr/bin/sos | grep GLIBC_ | sort -u | tail -n 5
 ```
 
 You should see `GLIBC_2.27` and no `GLIBC_2.34`. Please send the `GLIBC_` output so I can confirm.
+
+After rebuild, update the repo from the same machine:
+```bash
+git add SOS-Game-x86_64-glibc2.27.AppImage
+git commit -m "Rebuild AppImage on Ubuntu 18.04"
+git push
+```
