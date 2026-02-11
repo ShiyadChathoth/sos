@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=SOS Game
+Comment=Multiplayer SOS game
+Exec=sos
+Icon=sos
+Type=Application
+Categories=Game;
+Terminal=false
