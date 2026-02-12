@@ -1,26 +1,26 @@
-## Quick Install
-To install the SOS game to your system (`/opt/sos`), run this command:
+## One-Line Install (Recommended)
+No clone needed. This single command downloads and runs the installer script, then installs AppImage + desktop icon/launcher:
 
 ```bash
-git clone https://github.com/ShiyadChathoth/sos.git && cd sos && chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
+curl -fsSL https://raw.githubusercontent.com/ShiyadChathoth/sos/master/install_sos.sh | sudo bash -s -- --download
 ```
 
-## Install App Only (No Extra Files)
-Run this to install only the AppImage to `/opt/sos`:
+## One-Line Update
+Run the same command anytime to update to latest AppImage and refresh launcher/icon:
 
 ```bash
-sudo mkdir -p /opt/sos && sudo curl -L -o /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage https://github.com/ShiyadChathoth/sos/raw/master/SOS-Game-x86_64-glibc2.27.AppImage && sudo chmod +x /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage
+curl -fsSL https://raw.githubusercontent.com/ShiyadChathoth/sos/master/install_sos.sh | sudo bash -s -- --download
 ```
 
-## Update App Only (Single Line)
-Run this to update only the AppImage in `/opt/sos`:
+## Quick Install (From Cloned Repo)
+To install from local files in this repo:
 
 ```bash
-sudo mkdir -p /opt/sos && sudo curl -L -o /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage https://github.com/ShiyadChathoth/sos/raw/master/SOS-Game-x86_64-glibc2.27.AppImage && sudo chmod +x /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage
+chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
 ```
 
-## Update App (Single Line)
-Run this from inside the cloned `sos` folder to update and reinstall:
+## Update App (From Cloned Repo)
+From inside cloned `sos` folder:
 
 ```bash
 git pull && chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
