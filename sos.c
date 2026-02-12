@@ -58,7 +58,7 @@ int lastLobbySpectators = -1;
 
 typedef enum { MENU, NAME_INPUT, LOBBY, GAME } GameState;
 
-#define TURN_DURATION_SECONDS 60.0f
+#define TURN_DURATION_SECONDS 25.0f
 float turnTimer = TURN_DURATION_SECONDS;
 int isBotActive = 0;
 float frameDeltaSeconds = 0.0f;

@@ -1,7 +1,7 @@
 SOS Game (Linux) Installer Package
 
 Contents:
-- sos-x86_64.AppImage
+- SOS-Game-x86_64-glibc2.27.AppImage
 - install_sos.sh
 - uninstall_sos.sh
 - assets/sos.svg
@@ -9,7 +9,7 @@ Contents:
 Install:
 1) Open a terminal in this folder.
 2) Run:
-   sudo ./install_sos.sh
+   sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
 
 Uninstall:
 1) Run:
