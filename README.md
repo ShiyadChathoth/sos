@@ -5,6 +5,13 @@ To install the SOS game to your system (`/opt/sos`), run this command:
 git clone https://github.com/ShiyadChathoth/sos.git && cd sos && chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
 ```
 
+## Update App (Single Line)
+Run this from inside the cloned `sos` folder to update and reinstall:
+
+```bash
+git pull && chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
+```
+
 # SOS Game (Ubuntu 18.04+)
 
 This package contains a GLIBC 2.27 compatible AppImage and installer scripts.
