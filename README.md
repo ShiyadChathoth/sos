@@ -5,6 +5,20 @@ To install the SOS game to your system (`/opt/sos`), run this command:
 git clone https://github.com/ShiyadChathoth/sos.git && cd sos && chmod +x install_sos.sh && sudo ./install_sos.sh ./SOS-Game-x86_64-glibc2.27.AppImage
 ```
 
+## Install App Only (No Extra Files)
+Run this to install only the AppImage to `/opt/sos`:
+
+```bash
+sudo mkdir -p /opt/sos && sudo curl -L -o /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage https://github.com/ShiyadChathoth/sos/raw/master/SOS-Game-x86_64-glibc2.27.AppImage && sudo chmod +x /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage
+```
+
+## Update App Only (Single Line)
+Run this to update only the AppImage in `/opt/sos`:
+
+```bash
+sudo mkdir -p /opt/sos && sudo curl -L -o /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage https://github.com/ShiyadChathoth/sos/raw/master/SOS-Game-x86_64-glibc2.27.AppImage && sudo chmod +x /opt/sos/SOS-Game-x86_64-glibc2.27.AppImage
+```
+
 ## Update App (Single Line)
 Run this from inside the cloned `sos` folder to update and reinstall:
 
